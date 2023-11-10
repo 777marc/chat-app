@@ -1,17 +1,21 @@
+const path = require("path");
+const http = require("http");
 const express = require("express");
-const path = require("path"); // Node.js module for working with file paths
+const socketio = require("socket.io");
 
 const app = express();
-
-// Serve static files from the "public" directory
-app.use(express.static(path.join(__dirname, "public")));
-
-// Define a route for the root URL
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+const server = http.createServer(app);
+const io = socketio(server);
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const publicDirectoryPath = path.join(__dirname, "../public");
+
+app.use(express.static(publicDirectoryPath));
+
+io.on("connection", () => {
+  console.log("new connection");
+});
+
+server.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}.`);
 });
