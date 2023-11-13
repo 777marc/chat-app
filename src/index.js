@@ -17,12 +17,16 @@ let count = 0;
 io.on("connection", (socket) => {
   console.log("new connection");
 
-  socket.emit("countUpdated", count);
+  socket.emit("newConnections", "Welcome");
 
-  socket.on("increment", () => {
-    count++;
-    // gobal emit to all connected clients
-    io.emit("countUpdated", count);
+  // socket.on("increment", () => {
+  //   count++;
+  //   // gobal emit to all connected clients
+  //   io.emit("countUpdated", count);
+  // });
+
+  socket.on("newMessage", (message) => {
+    io.emit("serverResponse", `the server recieved: ${message}.`);
   });
 });
 
