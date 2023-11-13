@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
     const { latitude, longitude } = position;
     socket.broadcast.emit(
       "serverResponse",
-      `new user at lat/lon: ${latitude}/${longitude}`
+      `https://google.com/maps?q=${latitude},${longitude}`
     );
   });
 });
