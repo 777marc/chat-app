@@ -18,3 +18,14 @@ document.getElementById("myForm").addEventListener("submit", function (event) {
 socket.on("serverResponse", (res) => {
   console.log("from the server...", res);
 });
+
+document.querySelector("#sendLocation").addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    return alert("geolocation not supported by your browser");
+  }
+
+  navigator.geolocation.getCurrentPosition((position) => {
+    const { latitude, longitude } = position.coords;
+    socket.emit("sendLocation", { latitude, longitude });
+  });
+});

@@ -15,10 +15,22 @@ app.use(express.static(publicDirectoryPath));
 io.on("connection", (socket) => {
   console.log("new connection");
 
-  socket.emit("newConnections", "Welcome");
+  socket.broadcast.emit("newConnections", "new client has joined");
 
   socket.on("newMessage", (message) => {
     io.emit("serverResponse", `the server recieved: ${message}.`);
+  });
+
+  socket.on("disconnect", () => {
+    io.emit("serverResponse", "A user has disconnected.");
+  });
+
+  socket.on("sendLocation", (position) => {
+    const { latitude, longitude } = position;
+    socket.broadcast.emit(
+      "serverResponse",
+      `new user at lat/lon: ${latitude}/${longitude}`
+    );
   });
 });
 
