@@ -27,6 +27,7 @@ io.on("connection", (socket) => {
 
   socket.on("sendLocation", (position) => {
     const { latitude, longitude } = position;
+    console.log("sendLocationListener", latitude);
     socket.broadcast.emit(
       "serverResponse",
       `https://google.com/maps?q=${latitude},${longitude}`
