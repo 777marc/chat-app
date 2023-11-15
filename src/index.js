@@ -17,8 +17,9 @@ io.on("connection", (socket) => {
 
   socket.broadcast.emit("newConnections", "new client has joined");
 
-  socket.on("newMessage", (message) => {
+  socket.on("newMessage", (message, callback) => {
     io.emit("serverResponse", `the server recieved: ${message}.`);
+    callback();
   });
 
   socket.on("disconnect", () => {

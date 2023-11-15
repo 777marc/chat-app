@@ -12,7 +12,9 @@ document.getElementById("myForm").addEventListener("submit", function (event) {
   var inputValue = document.getElementById("inputField").value;
 
   // Perform any action with the input value (for example, log it to the console)
-  socket.emit("newMessage", inputValue);
+  socket.emit("newMessage", inputValue, () => {
+    console.log("server acknowledged");
+  });
 });
 
 socket.on("serverResponse", (res) => {
