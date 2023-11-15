@@ -26,13 +26,13 @@ io.on("connection", (socket) => {
     io.emit("serverResponse", "A user has disconnected.");
   });
 
-  socket.on("sendLocation", (position) => {
+  socket.on("sendLocation", (position, callback) => {
     const { latitude, longitude } = position;
-    console.log("sendLocationListener", latitude);
     socket.broadcast.emit(
       "serverResponse",
       `https://google.com/maps?q=${latitude},${longitude}`
     );
+    callback();
   });
 });
 
