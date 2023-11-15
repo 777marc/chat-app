@@ -5,14 +5,11 @@ socket.on("newConnections", (message) => {
 });
 
 document.getElementById("myForm").addEventListener("submit", function (event) {
-  // Prevent the default form submission
   event.preventDefault();
   document.getElementById("submit").disabled = true;
 
-  // Access the value entered in the input field
   var inputValue = document.getElementById("inputField").value;
 
-  // Perform any action with the input value (for example, log it to the console)
   socket.emit("newMessage", inputValue, () => {
     console.log("server acknowledged");
     document.getElementById("inputField").value = "";
