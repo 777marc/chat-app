@@ -20,6 +20,7 @@ document.getElementById("myForm").addEventListener("submit", function (event) {
 
 socket.on("serverResponse", (res) => {
   console.log("from the server...", res);
+  addItem(res);
 });
 
 document.querySelector("#sendLocation").addEventListener("click", () => {
@@ -38,3 +39,18 @@ document.querySelector("#sendLocation").addEventListener("click", () => {
     });
   });
 });
+
+function addItem(message) {
+  // Get the UL element
+  var ulElement = document.getElementById("myList");
+
+  // Create a new list item
+  var liElement = document.createElement("li");
+
+  // Set the text content of the list item (you can modify this as needed)
+  var itemText = document.createTextNode(message);
+  liElement.appendChild(itemText);
+
+  // Append the new list item to the UL
+  ulElement.appendChild(liElement);
+}
