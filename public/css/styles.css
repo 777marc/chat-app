@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.inner-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: 2px solid #333;
+  border-color: black;
+  width: 50%;
+  margin: 5px;
+}

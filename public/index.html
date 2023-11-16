@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles.css">
     <title>Chat App</title>
   </head>
   <body>
@@ -14,11 +15,21 @@
     </form>
     <br />
     <button id="sendLocation">send location</button>
+    
+    <div class="container">
+      <div class="inner-container">
+        <p>sent</p>
+        <ul id="sentMessages">
+        </ul>
+      </div>
 
-    <ul id="myList">
-      <!-- Existing list items, if any -->
-    </ul>
-  
+      <div class="inner-container">
+        <p>rec'd</p>
+        <ul id="recievedMessages">
+        </ul>
+      </div>
+    </div>
+ 
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/chat.js"></script>
   </body>

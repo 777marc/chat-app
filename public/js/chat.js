@@ -15,12 +15,12 @@ document.getElementById("myForm").addEventListener("submit", function (event) {
     document.getElementById("inputField").value = "";
     document.getElementById("inputField").focus();
     document.getElementById("submit").disabled = false;
+    addItem(inputValue, "sentMessages");
   });
 });
 
 socket.on("serverResponse", (res) => {
-  console.log("from the server...", res);
-  addItem(res);
+  addItem(res, "recievedMessages");
 });
 
 document.querySelector("#sendLocation").addEventListener("click", () => {
@@ -40,9 +40,9 @@ document.querySelector("#sendLocation").addEventListener("click", () => {
   });
 });
 
-function addItem(message) {
+function addItem(message, list) {
   // Get the UL element
-  var ulElement = document.getElementById("myList");
+  var ulElement = document.getElementById(list);
 
   // Create a new list item
   var liElement = document.createElement("li");
