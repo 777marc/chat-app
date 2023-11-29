@@ -4,20 +4,22 @@ socket.on("newConnections", (message) => {
   console.log(`the server says:${message}`);
 });
 
-document.getElementById("myForm").addEventListener("submit", function (event) {
-  event.preventDefault();
-  document.getElementById("submit").disabled = true;
+document
+  .getElementById("message-form")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+    document.getElementById("submit").disabled = true;
 
-  var inputValue = document.getElementById("inputField").value;
+    var inputValue = document.getElementById("inputField").value;
 
-  socket.emit("newMessage", inputValue, () => {
-    console.log("server acknowledged");
-    document.getElementById("inputField").value = "";
-    document.getElementById("inputField").focus();
-    document.getElementById("submit").disabled = false;
-    addItem(inputValue, "sentMessages");
+    socket.emit("newMessage", inputValue, () => {
+      console.log("server acknowledged");
+      document.getElementById("inputField").value = "";
+      document.getElementById("inputField").focus();
+      document.getElementById("submit").disabled = false;
+      addItem(inputValue, "sentMessages");
+    });
   });
-});
 
 socket.on("serverResponse", (res) => {
   addItem(res, "recievedMessages");
