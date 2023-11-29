@@ -33,6 +33,15 @@ io.on("connection", (socket) => {
     );
     callback();
   });
+
+  socket.on("join", ({ username, room }) => {
+    console.log("room", room);
+    socket.join(room);
+    socket.broadcast.emit("message", generateMessage(`Welcome to ${room}!`));
+    socket.broadcast
+      .to(room)
+      .emit("message", generateMessage(`${username} has joined the room.`));
+  });
 });
 
 server.listen(port, () => {

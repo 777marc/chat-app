@@ -16,6 +16,11 @@ socket.on("newConnections", (message) => {
   console.log(message);
 });
 
+// options
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
+
 socket.on("serverResponse", ({ message, createdAt }) => {
   const html = Mustache.render($messageTemplate, {
     message,
@@ -59,3 +64,5 @@ $sendLocationButton.addEventListener("click", () => {
     });
   });
 });
+
+socket.emit("join", { username, room });
