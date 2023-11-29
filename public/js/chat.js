@@ -5,9 +5,18 @@ const $messageForm = document.getElementById("message-form");
 const $messageFormInput = document.getElementById("input");
 const $messageFormButton = document.getElementById("submit");
 const $sendLocationButton = document.getElementById("send-location");
+const $messages = document.getElementById("messages");
+
+// templates
+const $messageTemplate = document.getElementById("message-template").innerHTML;
 
 socket.on("newConnections", (message) => {
   console.log(`the server says:${message}`);
+});
+
+socket.on("serverResponse", (message) => {
+  const html = Mustache.render($messageTemplate, { message });
+  $messages.insertAdjacentHTML("beforeend", html);
 });
 
 $messageForm.addEventListener("submit", function (event) {
@@ -24,10 +33,6 @@ $messageForm.addEventListener("submit", function (event) {
   });
 });
 
-socket.on("serverResponse", (res) => {
-  addItem(res, "recievedMessages");
-});
-
 $sendLocationButton.addEventListener("click", () => {
   $sendLocationButton.disabled = true;
   if (!navigator.geolocation) {
@@ -35,7 +40,6 @@ $sendLocationButton.addEventListener("click", () => {
     return alert("geolocation not supported by your browser");
   }
 
-  //console.log("sending location");
   navigator.geolocation.getCurrentPosition((position) => {
     const { latitude, longitude } = position.coords;
     socket.emit("sendLocation", { latitude, longitude }, () => {
