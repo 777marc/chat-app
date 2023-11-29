@@ -29,7 +29,7 @@ io.on("connection", (socket) => {
     const { latitude, longitude } = position;
     socket.broadcast.emit(
       "locationResponse",
-      `https://google.com/maps?q=${latitude},${longitude}`
+      generateMessage(`https://google.com/maps?q=${latitude},${longitude}`)
     );
     callback();
   });

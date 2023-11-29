@@ -13,20 +13,22 @@ const $locationTemplate =
   document.getElementById("location-template").innerHTML;
 
 socket.on("newConnections", (message) => {
-  console.log(`the server says:${message}`);
+  console.log(message);
 });
 
 socket.on("serverResponse", ({ message, createdAt }) => {
   const html = Mustache.render($messageTemplate, {
     message,
-    createdAt: moment().format("h:mm:ss a"),
+    createdAt: moment(createdAt).format("h:mm:ss a"),
   });
   $messages.insertAdjacentHTML("beforeend", html);
 });
 
-socket.on("locationResponse", (location) => {
-  console.log("loc:", location);
-  const html = Mustache.render($locationTemplate, { location });
+socket.on("locationResponse", ({ message, createdAt }) => {
+  const html = Mustache.render($locationTemplate, {
+    location: message,
+    createdAt: moment(createdAt).format("h:mm:ss a"),
+  });
   $messages.insertAdjacentHTML("beforeend", html);
 });
 
@@ -37,7 +39,6 @@ $messageForm.addEventListener("submit", function (event) {
   var message = $messageFormInput.value;
 
   socket.emit("message", message, () => {
-    console.log("server acknowledged");
     $messageFormInput.value = "";
     $messageFormInput.focus();
     $messageFormButton.disabled = false;
@@ -54,7 +55,6 @@ $sendLocationButton.addEventListener("click", () => {
   navigator.geolocation.getCurrentPosition((position) => {
     const { latitude, longitude } = position.coords;
     socket.emit("sendLocation", { latitude, longitude }, () => {
-      console.log("server ack receipt");
       $sendLocationButton.disabled = false;
     });
   });
