@@ -31,10 +31,10 @@ io.on("connection", (socket) => {
   socket.on("join", ({ username, room }) => {
     console.log("room", room, username);
     socket.join(room);
-    socket.broadcast.emit("message", generateMessage(`Welcome to ${room}!`));
+    socket.broadcast.emit("serverResponse", generateMessage(`Welcome to ${room}!`));
     socket.broadcast
       .to(room)
-      .emit("message", generateMessage(`${username} has joined the room.`));
+      .emit("serverResponse", generateMessage(`${username} has joined the room.`));
   });
 
   socket.on("disconnect", () => {
