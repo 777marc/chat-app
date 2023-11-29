@@ -12,10 +12,6 @@ const $messageTemplate = document.getElementById("message-template").innerHTML;
 const $locationTemplate =
   document.getElementById("location-template").innerHTML;
 
-socket.on("newConnections", (message) => {
-  console.log(message);
-});
-
 // options
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,

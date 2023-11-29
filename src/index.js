@@ -14,15 +14,9 @@ const publicDirectoryPath = path.join(__dirname, "../public");
 app.use(express.static(publicDirectoryPath));
 
 io.on("connection", (socket) => {
-  socket.broadcast.emit("newConnections", "new client has joined");
-
   socket.on("message", (message, callback) => {
     socket.broadcast.emit("serverResponse", generateMessage(message));
     callback();
-  });
-
-  socket.on("disconnect", () => {
-    io.emit("serverResponse", generateMessage("A user has disconnected."));
   });
 
   socket.on("sendLocation", (position, callback) => {
@@ -35,12 +29,16 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join", ({ username, room }) => {
-    console.log("room", room);
+    console.log("room", room, username);
     socket.join(room);
     socket.broadcast.emit("message", generateMessage(`Welcome to ${room}!`));
     socket.broadcast
       .to(room)
       .emit("message", generateMessage(`${username} has joined the room.`));
+  });
+
+  socket.on("disconnect", () => {
+    io.emit("serverResponse", generateMessage("A user has disconnected."));
   });
 });
 
