@@ -9,13 +9,24 @@ const $messages = document.getElementById("messages");
 
 // templates
 const $messageTemplate = document.getElementById("message-template").innerHTML;
+const $locationTemplate =
+  document.getElementById("location-template").innerHTML;
 
 socket.on("newConnections", (message) => {
   console.log(`the server says:${message}`);
 });
 
-socket.on("serverResponse", (message) => {
-  const html = Mustache.render($messageTemplate, { message });
+socket.on("serverResponse", ({ message, createdAt }) => {
+  const html = Mustache.render($messageTemplate, {
+    message,
+    createdAt: moment().format("h:mm:ss a"),
+  });
+  $messages.insertAdjacentHTML("beforeend", html);
+});
+
+socket.on("locationResponse", (location) => {
+  console.log("loc:", location);
+  const html = Mustache.render($locationTemplate, { location });
   $messages.insertAdjacentHTML("beforeend", html);
 });
 
@@ -25,7 +36,7 @@ $messageForm.addEventListener("submit", function (event) {
 
   var message = $messageFormInput.value;
 
-  socket.emit("newMessage", message, () => {
+  socket.emit("message", message, () => {
     console.log("server acknowledged");
     $messageFormInput.value = "";
     $messageFormInput.focus();

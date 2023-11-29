@@ -2,6 +2,7 @@ const path = require("path");
 const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
+const { generateMessage } = require("./utils/messages");
 
 const app = express();
 const server = http.createServer(app);
@@ -13,23 +14,21 @@ const publicDirectoryPath = path.join(__dirname, "../public");
 app.use(express.static(publicDirectoryPath));
 
 io.on("connection", (socket) => {
-  console.log("new connection");
-
   socket.broadcast.emit("newConnections", "new client has joined");
 
-  socket.on("newMessage", (message, callback) => {
-    socket.broadcast.emit("serverResponse", message);
+  socket.on("message", (message, callback) => {
+    socket.broadcast.emit("serverResponse", generateMessage(message));
     callback();
   });
 
   socket.on("disconnect", () => {
-    io.emit("serverResponse", "A user has disconnected.");
+    io.emit("serverResponse", generateMessage("A user has disconnected."));
   });
 
   socket.on("sendLocation", (position, callback) => {
     const { latitude, longitude } = position;
     socket.broadcast.emit(
-      "serverResponse",
+      "locationResponse",
       `https://google.com/maps?q=${latitude},${longitude}`
     );
     callback();
