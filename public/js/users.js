@@ -42,3 +42,10 @@ const removeUser = (id) => {
     return users.splice(index, 1)[0];
   }
 };
+
+module.exports = {
+  addUser,
+  removeUser,
+  getUser,
+  getUsersInRoom,
+};
