@@ -3,6 +3,12 @@ const http = require("http");
 const express = require("express");
 const socketio = require("socket.io");
 const { generateMessage } = require("./utils/messages");
+const {
+  getUser,
+  addUser,
+  removeUser,
+  getUsersInRoom,
+} = require("./utils/users");
 
 const app = express();
 const server = http.createServer(app);
@@ -29,8 +35,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join", ({ username, room }) => {
-    console.log("room", room, username);
     socket.join(room);
+
+    addUser({ id: socket.id, username, room });
+
     socket.broadcast.emit(
       "serverResponse",
       generateMessage(`Welcome to ${room}!`)
@@ -44,6 +52,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
+    removeUser(socket.id);
     io.emit("serverResponse", generateMessage("A user has disconnected."));
   });
 });
