@@ -15,7 +15,7 @@ app.use(express.static(publicDirectoryPath));
 
 io.on("connection", (socket) => {
   socket.on("message", (message, callback) => {
-    socket.broadcast.emit("serverResponse", generateMessage(message));
+    io.to("123").emit("serverResponse", generateMessage(message));
     callback();
   });
 
@@ -31,10 +31,16 @@ io.on("connection", (socket) => {
   socket.on("join", ({ username, room }) => {
     console.log("room", room, username);
     socket.join(room);
-    socket.broadcast.emit("serverResponse", generateMessage(`Welcome to ${room}!`));
+    socket.broadcast.emit(
+      "serverResponse",
+      generateMessage(`Welcome to ${room}!`)
+    );
     socket.broadcast
       .to(room)
-      .emit("serverResponse", generateMessage(`${username} has joined the room.`));
+      .emit(
+        "serverResponse",
+        generateMessage(`${username} has joined the room.`)
+      );
   });
 
   socket.on("disconnect", () => {
