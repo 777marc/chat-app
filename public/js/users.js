@@ -35,11 +35,10 @@ const getUsersInRoom = (room) => {
   return users.filter((user) => user.room === room);
 };
 
-addUser(1, "mike", "123");
-addUser(2, "marc", "123");
-addUser(3, "marc", "1234");
+const removeUser = (id) => {
+  const index = users.findIndex((user) => user.id === id);
 
-console.log(users);
-
-console.log(getUser(3));
-console.log(getUsersInRoom("123"));
+  if (index !== -1) {
+    return users.splice(index, 1)[0];
+  }
+};
