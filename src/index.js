@@ -20,6 +20,30 @@ const publicDirectoryPath = path.join(__dirname, "../public");
 app.use(express.static(publicDirectoryPath));
 
 io.on("connection", (socket) => {
+  socket.on("join", ({ username, room }, callback) => {
+    const { error, user } = addUser({ id: socket.id, username, room });
+
+    if (error) {
+      return callback(error);
+    }
+
+    socket.join(room);
+
+    socket.broadcast.emit(
+      "serverResponse",
+      generateMessage(`Welcome to ${room}!`)
+    );
+
+    socket.broadcast
+      .to(room)
+      .emit(
+        "serverResponse",
+        generateMessage(`${username} has joined the room.`)
+      );
+
+    callback();
+  });
+
   socket.on("message", (message, callback) => {
     io.to("1").emit("serverResponse", generateMessage(message));
     callback();
@@ -34,27 +58,12 @@ io.on("connection", (socket) => {
     callback();
   });
 
-  socket.on("join", ({ username, room }) => {
-    socket.join(room);
-
-    addUser({ id: socket.id, username, room });
-
-    socket.broadcast.emit(
-      "serverResponse",
-      generateMessage(`Welcome to ${room}!`)
-    );
-    socket.broadcast
-      .to(room)
-      .emit(
-        "serverResponse",
-        generateMessage(`${username} has joined the room.`)
-      );
-  });
-
   socket.on("disconnect", () => {
     removeUser(socket.id);
     io.emit("serverResponse", generateMessage("A user has disconnected."));
   });
+
+  socket.emit("join", { username, room }, (error) => {});
 });
 
 server.listen(port, () => {
