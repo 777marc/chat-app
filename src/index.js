@@ -21,7 +21,7 @@ app.use(express.static(publicDirectoryPath));
 
 io.on("connection", (socket) => {
   socket.on("message", (message, callback) => {
-    io.to("123").emit("serverResponse", generateMessage(message));
+    io.to("1").emit("serverResponse", generateMessage(message));
     callback();
   });
 
